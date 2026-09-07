@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+h1 {
+    color: teal;
+}
+
+h2 {
+    color: teal;
+}
+
+label {
+    float: left;
+    width: 8em;
+    margin-bottom: 0.5em;
+}
+
+input[type=text], input[type=email], select {
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+input[type=text], input[type=email] {
+    width: 15em;
+}
+
+br {
+    clear: both;
+}
+
+#submit {
+    margin-left: 8.5em;
+}
+
+table td {
+    padding-right: 1em;
+    padding-bottom: 0.3em;
+    vertical-align: top;
+}
+
+td.label {
+    font-weight: bold;
+}

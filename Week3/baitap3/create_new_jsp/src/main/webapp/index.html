@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Murach's Java Servlets and JSP</title>
+    <link rel="stylesheet" href="main.css" type="text/css">
+</head>
+<body>
+    <h1>Please take our survey</h1>
+    <p>Fill out the form below and click Submit.</p>
+
+    <form action="survey" method="post">
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+
+        <label>First Name:</label>
+        <input type="text" name="firstName" required><br>
+
+        <label>Last Name:</label>
+        <input type="text" name="lastName" required><br>
+
+        <label>Heard From:</label>
+        <select name="heardFrom">
+            <option value="Search Engine" selected>Search Engine</option>
+            <option value="Word of Mouth">Word of Mouth</option>
+            <option value="Social Media">Social Media</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <label>Updates:</label>
+        <input type="checkbox" name="updates" value="Yes">
+        Yes, send me updates about new products<br>
+
+        <label>Contact Via:</label>
+        <select name="contactVia">
+            <option value="Email" selected>Email</option>
+            <option value="Phone">Phone</option>
+            <option value="Text">Text</option>
+        </select><br>
+
+        <input type="submit" value="Submit" id="submit">
+    </form>
+</body>
+</html>
