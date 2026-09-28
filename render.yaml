@@ -9,7 +9,7 @@
 
 services:
   - type: web
-    name: ch14email
+    name: hoalvh-baitap-web-tuan7-ch14email
     runtime: docker
     plan: free
     region: singapore          # gan Viet Nam nhat
@@ -21,7 +21,7 @@ services:
       # docker-entrypoint.sh doi chuoi "postgresql://..." nay thanh JDBC URL.
       - key: DATABASE_URL
         fromDatabase:
-          name: ch14email-db
+          name: hoalvh-baitap-web-tuan7-db
           property: connectionString
 
       # Goi free cua Render Postgres gioi han so ket noi, va instance free hay
@@ -57,7 +57,7 @@ services:
         sync: false
 
 databases:
-  - name: ch14email-db
+  - name: hoalvh-baitap-web-tuan7-db
     databaseName: murach
     plan: free
     region: singapore
