@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Connection pool cho TOMCAT khi deploy war THU CONG len mot Tomcat co san
+  (Tomcat tu doc file nay). Tro toi MySQL o may, giong Week6.
+
+  Khi chay bang "mvn jetty:run": Jetty KHONG doc file nay ma doc
+  WEB-INF/jetty-env.xml.
+
+  Khi chay bang Docker / tren Render: docker-entrypoint.sh sinh ra
+  conf/Catalina/localhost/ROOT.xml voi thong tin lay tu bien moi truong, va
+  file do DE LEN file nay. Nho vay chuoi ket noi that cua Render khong can
+  nam trong git.
+
+  Khac slide chuong 12 (viet cho Tomcat 7 / DBCP 1):
+    com.mysql.jdbc.Driver  -> com.mysql.cj.jdbc.Driver   (Connector/J 8)
+    maxActive              -> maxTotal                   (Tomcat 8+ dung DBCP 2)
+    maxWait                -> maxWaitMillis
+    removeAbandoned        -> removeAbandonedOnBorrow
+
+  LUU Y: voi pool do Tomcat quan ly, driver JDBC phai nam trong
+  $CATALINA_HOME/lib (Dockerfile da copy san ca postgresql lan mysql).
+-->
+<Context>
+    <Resource name="jdbc/murach" auth="Container" type="javax.sql.DataSource"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/murach?serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true"
+              username="murach_user" password="sesame"
+              maxTotal="10" maxIdle="5" maxWaitMillis="10000"
+              testOnBorrow="true" validationQuery="SELECT 1"
+              logAbandoned="true" removeAbandonedOnBorrow="true"
+              removeAbandonedTimeout="60" />
+</Context>

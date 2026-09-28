@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * Mot dong trong gio hang = mot Product + so luong.
- */
+
 public class LineItem implements Serializable {
 
     private Product product;

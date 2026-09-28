@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+  <display-name>ch12sqlGateway</display-name>
+
+  <servlet>
+    <servlet-name>SQLGatewayServlet</servlet-name>
+    <servlet-class>murach.sql.SQLGatewayServlet</servlet-class>
+  </servlet>
+
+  <!-- Slide 28: anh xa SQLGatewayServlet vao URL /sqlGateway -->
+  <servlet-mapping>
+    <servlet-name>SQLGatewayServlet</servlet-name>
+    <url-pattern>/sqlGateway</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CartServlet</servlet-name>
+    <servlet-class>murach.web.CartServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>CartServlet</servlet-name>
+    <url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+
+  <!-- Don vi la PHUT (khac setMaxInactiveInterval tinh bang GIAY) -->
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <!-- Slide 34-36: ung dung can mot DataSource ten jdbc/murach do container cung cap -->
+  <resource-ref>
+    <res-ref-name>jdbc/murach</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
+
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+</web-app>

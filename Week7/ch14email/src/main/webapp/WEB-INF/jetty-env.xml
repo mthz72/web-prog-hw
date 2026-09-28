@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "https://www.eclipse.org/jetty/configure_10_0.dtd">
+<!--
+  Tuong duong META-INF/context.xml nhung cho JETTY (mvn jetty:run), tuc la
+  cho luc chay o may. Tren Render chay bang Tomcat nen file nay khong duoc doc.
+
+  Dang ky DataSource ten "jdbc/murach" -> ConnectionPool tra cuu duoc qua JNDI,
+  va JPAUtil dua thang DataSource do cho Hibernate dung.
+  Pool dung HikariCP (khai bao trong pom.xml).
+
+  Mac dinh tro toi MySQL o may. Muon thu PostgreSQL ngay o may (cho giong
+  Render) thi chay:
+    mvn jetty:run -Ddb.url=jdbc:postgresql://localhost:5432/murach \
+                  -Ddb.driver=org.postgresql.Driver \
+                  -Ddb.username=... -Ddb.password=...
+-->
+<Configure id="wac" class="org.eclipse.jetty.webapp.WebAppContext">
+    <New id="murach" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg><Ref refid="wac"/></Arg>
+        <Arg>jdbc/murach</Arg>
+        <Arg>
+            <New class="com.zaxxer.hikari.HikariDataSource">
+                <Set name="driverClassName">
+                    <SystemProperty name="db.driver" default="com.mysql.cj.jdbc.Driver"/>
+                </Set>
+                <Set name="jdbcUrl">
+                    <SystemProperty name="db.url"
+                        default="jdbc:mysql://localhost:3306/murach?serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true"/>
+                </Set>
+                <Set name="username">
+                    <SystemProperty name="db.username" default="murach_user"/>
+                </Set>
+                <Set name="password">
+                    <SystemProperty name="db.password" default="sesame"/>
+                </Set>
+                <Set name="maximumPoolSize">10</Set>
+                <!-- cho toi da 10s de lay connection, khop maxWaitMillis trong context.xml -->
+                <Set name="connectionTimeout">10000</Set>
+            </New>
+        </Arg>
+    </New>
+</Configure>

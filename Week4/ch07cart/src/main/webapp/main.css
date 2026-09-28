@@ -28,7 +28,7 @@ th, td {
     white-space: nowrap;
 }
 
-/* Cac nut nam trong form rieng -> bo margin de khong day layout */
+
 form {
     display: inline;
     margin: 0;

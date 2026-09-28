@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  File cau hinh cua JPA. Maven se dong no vao WEB-INF/classes/META-INF/persistence.xml,
+  do la cho JPA tu tim, khong can khai bao them o web.xml.
+
+  CHU Y cho ca bai: o day KHONG co url / username / password / driver.
+  Thong tin ket noi nam trong connection pool cua container
+  (META-INF/context.xml cho Tomcat, WEB-INF/jetty-env.xml cho Jetty), va
+  JPAUtil truyen DataSource do vao luc tao EntityManagerFactory.
+  Nho vay doi mat khau CSDL chi phai sua mot cho.
+
+  transaction-type="RESOURCE_LOCAL": ung dung tu goi begin/commit
+  (xem UserDB). Neu chay tren server Jakarta EE day du thi moi dung JTA.
+-->
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="murachPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>murach.business.User</class>
+        <!-- Chi map dung lop liet ke o tren, khoi quet ca war cho nhanh -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <!-- Khong khai bao hibernate.dialect: Hibernate 6 tu nhan ra
+                 MySQL qua metadata cua connection. Ghi ro ra thi no canh bao
+                 HHH90000025 "does not need to be specified explicitly". -->
+
+            <!-- none: JPA KHONG duoc tu tao/sua bang. Bang do db/create_murach_db.sql
+                 tao ra. De "update" thi Hibernate co the am tham doi schema. -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+
+            <!-- Bat de xem SQL ma Hibernate sinh ra, tien doi chieu voi Week6.
+                 Nop bai xong nen doi ve false. -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

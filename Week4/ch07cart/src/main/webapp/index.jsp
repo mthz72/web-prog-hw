@@ -20,8 +20,6 @@
         <td>86 (the band) - True Life Songs and Pictures</td>
         <td class="right">$14.95</td>
         <td>
-            <%-- Slide 35: form + HIDDEN FIELD de mang tham so toi controller.
-                 Dung POST nen URL khong lo tham so. --%>
             <form action="cart" method="post">
                 <input type="hidden" name="action" value="add">
                 <input type="hidden" name="productCode" value="8601">

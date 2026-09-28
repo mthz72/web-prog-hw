@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.hoalvh</groupId>
+  <artifactId>ch14email</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>ch14email Maven Webapp</name>
+  <url>http://www.example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>5.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- JSTL. Ban 2.0.0 van dung URI cu "http://java.sun.com/jsp/jstl/core",
+         KHONG phai "jakarta.tags.core" (URI do chi co tu JSTL 3.0). -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <version>2.0.0</version>
+      <!-- JSTL keo theo jakarta.xml.bind-api 3.0.0, va jar do lai keo
+           com.sun.activation:jakarta.activation 2.0.0. Ket qua:
+             - jakarta.activation 2.0.0 va jakarta.activation-api 2.1.3 cung
+               chua package jakarta.activation -> trung lop, gui mail co the
+               bao "no object DCH for MIME type"
+             - bind-api 3.0.0 lai de len bind-api 4.x ma jaxb-runtime cua
+               Hibernate can (Maven uu tien dependency o gan hon)
+           Cat o day de chi con MOT bo: bind-api 4.x + jakarta.activation-api
+           2.1.3 + angus-activation, do angus-mail va Hibernate mang vao. -->
+      <exclusions>
+        <exclusion>
+          <groupId>jakarta.xml.bind</groupId>
+          <artifactId>jakarta.xml.bind-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+
+    <!-- ================= CHUONG 14: JavaMail (slide 9-13) =================
+         Slide 13 bao tai javax.mail.jar thu cong roi bo vao WEB-INF/lib.
+         Khac slide: Maven tai giup, va vi du an chay tren Jakarta EE nen phai
+         dung ban JavaMail da doi ten package javax.mail.* -> jakarta.mail.*
+
+         Slide 9 noi JavaMail can them activation.jar. Dung: o day la
+         jakarta.activation-api + angus-activation, va ca hai duoc keo vao
+         tu dong nen KHONG phai khai bao rieng.
+
+         Vi sao la angus-mail (Jakarta Mail 2.1) chu khong phai
+         com.sun.mail:jakarta.mail (Jakarta Mail 2.0):
+         ban 2.0 keo theo com.sun.activation:jakarta.activation:2.0.1, con
+         Hibernate ben duoi keo jakarta.activation-api:2.1.x. Hai jar nay
+         chua CUNG package jakarta.activation -> classpath bi trung lop,
+         lop nao thang la tuy thu tu classloader, va luc gui mail that se
+         bao loi kieu "no object DCH for MIME type". Ban 2.1 dung dung
+         jakarta.activation-api 2.1 nhu Hibernate nen chi con mot bo. -->
+    <dependency>
+      <groupId>org.eclipse.angus</groupId>
+      <artifactId>angus-mail</artifactId>
+      <version>2.0.3</version>
+    </dependency>
+
+    <!-- ================= JPA (yeu cau them cua bai tap) =================
+         jakarta.persistence-api la BO GIAO DIEN (EntityManager, @Entity...),
+         Hibernate la BO CAI DAT thuc su o duoi. Doi code sang EclipseLink
+         chi can thay dependency nay, code Java giu nguyen. -->
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.4.4.Final</version>
+    </dependency>
+
+    <!-- JDBC driver cho MySQL (Type 4 - native protocol all Java). Dung khi
+         chay o may (mvn jetty:run + MySQL trong Docker). -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.4.0</version>
+    </dependency>
+
+    <!-- JDBC driver cho PostgreSQL. Can khi deploy len Render: Render chi co
+         PostgreSQL chu khong co MySQL.
+         Vi tang du lieu viet bang JPA nen doi engine KHONG phai sua mot dong
+         nao trong UserDB - chi doi JDBC URL. Hibernate tu nhan ra dialect qua
+         metadata cua connection. Day dung la ly do nguoi ta dung JPA. -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.7.3</version>
+    </dependency>
+
+    <!-- ================= CONNECTION POOL (yeu cau them cua bai tap) =======
+         Pool dung cho Jetty (WEB-INF/jetty-env.xml). Tomcat dung DBCP co san
+         cua no nen tren Tomcat dependency nay khong duoc dung toi. -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>5.1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>ch14email</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>11.0.17</version>
+        <configuration>
+          <webApp>
+            <contextPath>/ch14email</contextPath>
+          </webApp>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

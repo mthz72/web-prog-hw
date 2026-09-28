@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Slide 34: cau hinh connection pool cho TOMCAT (Tomcat tu doc file nay).
+  Khi chay bang "mvn jetty:run" thi Jetty KHONG doc file nay, ma doc WEB-INF/jetty-env.xml.
+
+  Khac slide (slide viet cho Tomcat 7 / DBCP 1):
+    com.mysql.jdbc.Driver  -> com.mysql.cj.jdbc.Driver   (Connector/J 8)
+    maxActive              -> maxTotal                   (Tomcat 8+ dung DBCP 2)
+    maxWait                -> maxWaitMillis
+    removeAbandoned        -> removeAbandonedOnBorrow
+    thuoc tinh path="..."  -> bo, Tomcat bo qua path trong META-INF/context.xml
+
+  LUU Y: voi pool do Tomcat quan ly, file mysql-connector-j-*.jar phai nam trong
+  $CATALINA_HOME/lib (Dockerfile da copy san).
+-->
+<Context>
+    <Resource name="jdbc/murach" auth="Container" type="javax.sql.DataSource"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/murach?serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true"
+              username="murach_user" password="sesame"
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              logAbandoned="true" removeAbandonedOnBorrow="true"
+              removeAbandonedTimeout="60" />
+</Context>

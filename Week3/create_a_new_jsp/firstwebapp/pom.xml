@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.hoalvh</groupId>
-  <artifactId>firstwebapp</artifactId>
+  <artifactId>week3_create_a_new_jsp</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>firstwebapp Maven Webapp</name>
+  <name>week3_create_a_new_jsp Maven Webapp</name>
   <url>http://www.example.com</url>
 
   <properties>

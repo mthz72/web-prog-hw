@@ -7,16 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import murach.business.Cart;
 import murach.business.LineItem;
 import murach.business.Product;
 import murach.data.ProductIO;
 
-/**
- * Controller duy nhat cua ung dung. Phan nhanh theo tham so "action"
- * (add / update / remove / shop) - dung mau Controller cua sach.
- */
+
 public class CartServlet extends HttpServlet {
 
     @Override
@@ -25,20 +21,18 @@ public class CartServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action == null) {
-            action = "cart";  // hanh dong mac dinh: xem gio hang
+            action = "cart";  
         }
 
         HttpSession session = request.getSession();
         String url = "/cart.jsp";
 
-        // Slide 15-16: nhieu tab cung mo -> nhieu thread cung dung 1 session object.
-        // Khoa tren session ID da intern() => moi user mot khoa rieng,
-        // khong khoa toan cuc nen user khac khong bi cho.
+     
         final Object lock = session.getId().intern();
 
         synchronized (lock) {
             Cart cart = (Cart) session.getAttribute("cart");
-            if (cart == null) {          // lan dau vao -> chua co gio hang
+            if (cart == null) {          
                 cart = new Cart();
             }
 
@@ -56,7 +50,7 @@ public class CartServlet extends HttpServlet {
                     removeFromCart(request, cart);
                     break;
                 default:
-                    break;               // "cart" hoac gia tri la -> chi hien gio hang
+                    break;               
             }
 
             session.setAttribute("cart", cart);
@@ -71,7 +65,7 @@ public class CartServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    /** Nut "Add To Cart" o index.jsp: them 1 dia vao gio. */
+  
     private void addToCart(HttpServletRequest request, Cart cart) {
         Product product = getProductFromRequest(request);
         if (product == null) {
@@ -83,7 +77,7 @@ public class CartServlet extends HttpServlet {
         cart.addItem(lineItem);
     }
 
-    /** Nut "Update" o cart.jsp: dat lai so luong; nhap 0 thi xoa dong do. */
+   
     private void updateCart(HttpServletRequest request, Cart cart) {
         Product product = getProductFromRequest(request);
         if (product == null) {
@@ -94,7 +88,7 @@ public class CartServlet extends HttpServlet {
         try {
             quantity = Integer.parseInt(request.getParameter("quantity"));
         } catch (NumberFormatException e) {
-            return;   // nguoi dung go chu vao o so luong -> bo qua
+            return;  
         }
         if (quantity < 0) {
             return;
@@ -111,7 +105,7 @@ public class CartServlet extends HttpServlet {
         }
     }
 
-    /** Nut "Remove Item" o cart.jsp. */
+    
     private void removeFromCart(HttpServletRequest request, Cart cart) {
         Product product = getProductFromRequest(request);
         if (product == null) {

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "https://www.eclipse.org/jetty/configure_10_0.dtd">
+<!--
+  Tuong duong META-INF/context.xml nhung cho JETTY (mvn jetty:run).
+  Dang ky DataSource ten "jdbc/murach" -> ConnectionPool tra cuu duoc qua JNDI.
+  Pool dung HikariCP (khai bao trong pom.xml).
+-->
+<Configure id="wac" class="org.eclipse.jetty.webapp.WebAppContext">
+    <New id="murach" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg><Ref refid="wac"/></Arg>
+        <Arg>jdbc/murach</Arg>
+        <Arg>
+            <New class="com.zaxxer.hikari.HikariDataSource">
+                <Set name="driverClassName">com.mysql.cj.jdbc.Driver</Set>
+                <Set name="jdbcUrl">jdbc:mysql://localhost:3306/murach?serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true</Set>
+                <Set name="username">murach_user</Set>
+                <Set name="password">sesame</Set>
+                <Set name="maximumPoolSize">10</Set>
+                <!-- cho toi da 10s de lay connection, khop maxWaitMillis trong context.xml -->
+                <Set name="connectionTimeout">10000</Set>
+            </New>
+        </Arg>
+    </New>
+</Configure>
