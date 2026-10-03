@@ -56,6 +56,22 @@ services:
       - key: MAIL_PASSWORD
         sync: false
 
+  # --- Week 7: gio hang chuong 7 + thanh toan VNPay sandbox --------------
+  - type: web
+    name: hoalvh-baitap-web-tuan7-ch07cart-vnpay
+    runtime: docker
+    plan: free
+    region: singapore
+    rootDir: Week7/ch07cart-vnpay
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      # Lay trong email VNPay gui khi dang ky sandbox, khong luu vao git
+      - key: VNP_TMN_CODE
+        sync: false
+      - key: VNP_HASH_SECRET
+        sync: false
+
 databases:
   - name: hoalvh-baitap-web-tuan7-db
     databaseName: murach
